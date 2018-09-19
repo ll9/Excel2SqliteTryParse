@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace Excel2Sqlite
                 var dbPath = UserInteractionHandler.GetDialogResult<SaveFileDialog>("Sqlite (*.sqlite) | *.sqlite");
                 if (dbPath != null)
                 {
-                    MessageBox.Show("OK");
+                    File.Create(dbPath);
                 }
             }
         }
