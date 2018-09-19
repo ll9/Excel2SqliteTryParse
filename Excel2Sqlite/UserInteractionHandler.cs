@@ -14,9 +14,9 @@ namespace Excel2Sqlite
         /// User selects file
         /// </summary>
         /// <returns>Path of selected file or null if canceled</returns>
-        public static string GetDialogResult()
+        public static string GetDialogResult<T>(string filter = null, string initDir = null) where T: FileDialog, new()
         {
-            using (var dialog = GetDialog())
+            using (var dialog = new T { Filter = filter ?? "", InitialDirectory = initDir ?? Environment.GetFolderPath(Environment.SpecialFolder.Desktop) })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -24,15 +24,6 @@ namespace Excel2Sqlite
                 }
             }
             return null;
-        }
-
-        private static OpenFileDialog GetDialog()
-        {
-            return new OpenFileDialog
-            {
-                Filter = "Excel file (*.xlsx) | *.xlsx",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            };
         }
     }
 }

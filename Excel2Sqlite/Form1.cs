@@ -19,10 +19,14 @@ namespace Excel2Sqlite
 
         private void excel2SqliteButton_Click(object sender, EventArgs e)
         {
-            var excelPath = UserInteractionHandler.GetDialogResult();
+            var excelPath = UserInteractionHandler.GetDialogResult<OpenFileDialog>("Excel (*.xlsx) | *.xlsx");
             if (excelPath != null)
             {
-                MessageBox.Show("OK");
+                var dbPath = UserInteractionHandler.GetDialogResult<SaveFileDialog>("Sqlite (*.sqlite) | *.sqlite");
+                if (dbPath != null)
+                {
+                    MessageBox.Show("OK");
+                }
             }
         }
     }
