@@ -30,7 +30,7 @@ namespace Excel2Sqlite
         {
             return new OpenFileDialog
             {
-                Filter = "Excel file | *.xlsx",
+                Filter = "Excel file (*.xlsx) | *.xlsx",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
         }

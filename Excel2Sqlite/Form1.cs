@@ -19,7 +19,11 @@ namespace Excel2Sqlite
 
         private void excel2SqliteButton_Click(object sender, EventArgs e)
         {
-
+            var excelPath = UserInteractionHandler.GetDialogResult();
+            if (excelPath != null)
+            {
+                MessageBox.Show("OK");
+            }
         }
     }
 }
