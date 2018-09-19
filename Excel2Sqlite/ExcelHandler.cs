@@ -21,7 +21,8 @@ namespace Excel2Sqlite
 
         private static DataTable LoadExcelDataTable(string path)
         {
-            using (var workBook = new XLWorkbook(path))
+            using (var workBook = new 
+XLWorkbook(path))
             {
                 using (var workSheet = workBook.Worksheet(1))
                 {
@@ -55,6 +56,22 @@ namespace Excel2Sqlite
                     }
                     return dataTable;
                 }
+            }
+        }
+
+        public static void TestParse(string path)
+        {
+            var workBook = new XLWorkbook(path);
+            var workSheet = workBook.Worksheet(1);
+
+
+            foreach (var col in workSheet.ColumnsUsed())
+            {
+                var reuslt = col
+                    .CellsUsed()
+                    .Select(cell => cell.Value)
+                    .Distinct()
+                    .ToArray();
             }
         }
     }

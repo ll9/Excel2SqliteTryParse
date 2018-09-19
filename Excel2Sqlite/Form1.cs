@@ -27,6 +27,7 @@ namespace Excel2Sqlite
                 if (dbPath != null)
                 {
                     File.Create(dbPath);
+                    ExcelHandler.TestParse(excelPath);
                 }
             }
         }
