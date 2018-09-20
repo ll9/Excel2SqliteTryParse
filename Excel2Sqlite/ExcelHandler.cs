@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Excel2Sqlite
 {
-    class ExcelHandler
+    partial class ExcelHandler
     {
         private static SQLiteConnection GetConnection(string connectionString)
         {
