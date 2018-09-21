@@ -13,6 +13,8 @@ namespace Excel2Sqlite
 {
     public partial class Form1 : Form
     {
+        private ISqliteHandler sqliteHandler = new MockSqliteHandler();
+
         public Form1()
         {
             InitializeComponent();
@@ -27,7 +29,7 @@ namespace Excel2Sqlite
                 if (dbPath != null)
                 {
                     File.Create(dbPath);
-                    ExcelHandler.CreateDbFromExcel(excelPath);
+                    ExcelHandler.CreateDbFromExcel(excelPath, sqliteHandler);
                     MessageBox.Show("Done");
                 }
             }

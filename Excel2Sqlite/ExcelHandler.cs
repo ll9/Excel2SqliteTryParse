@@ -61,6 +61,13 @@ namespace Excel2Sqlite
 
             var createTableQuery = GetCreateTableQuery(workSheet);
             sqliteHandler.ExcecuteQuery(createTableQuery);
+
+            var insertQuery = GetInsertQuery();
+        }
+
+        private static string GetInsertQuery()
+        {
+            throw new NotImplementedException();
         }
 
         private static string GetCreateTableQuery(IXLWorksheet workSheet)
