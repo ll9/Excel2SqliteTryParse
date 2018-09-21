@@ -77,20 +77,20 @@ namespace Excel2Sqlite
             var createStatement = "CREATE TABLE FEATURES";
             foreach (var col in workSheet.ColumnsUsed())
             {
-                var guessedType = GuessTypeOfColumn(col);
+                var guessedType = GuessType(col);
             }
             var columnDeclarations = workSheet.ColumnsUsed()
                 .Select(col => 
                     Regex.Replace(col.FirstCellUsed().Value.ToString(), "[^0-9a-zA-Z]+", "") + 
                     " " + 
-                    GuessTypeOfColumn(col).GetSqlDataType())
+                    GuessType(col).GetSqlDataType())
                 .Aggregate((current, next) => $"{current}, {next}");
 
             return string.Format("{0} ({1})", createStatement, columnDeclarations);
         }
 
 
-        private static DataType GuessTypeOfColumn(IXLColumn col)
+        private static DataType GuessType(IXLColumn col)
         {
             var colDistinctValues = col
                 .CellsUsed()
@@ -110,7 +110,7 @@ namespace Excel2Sqlite
                 for (i = 0; i < values.Length; i++)
                 {
                     var value = values[i];
-                    if (ParseString(value) != type)
+                    if (GuessType(value) != type)
                     {
                         break;
                     }
@@ -121,7 +121,7 @@ namespace Excel2Sqlite
             return DataType.System_String;
         }
 
-        private static DataType ParseString(string str)
+        private static DataType GuessType(string str)
         {
 
             bool boolValue;
