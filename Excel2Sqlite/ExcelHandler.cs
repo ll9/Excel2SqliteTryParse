@@ -14,13 +14,6 @@ namespace Excel2Sqlite
 {
     partial class ExcelHandler
     {
-        private static SQLiteConnection GetConnection(string connectionString)
-        {
-            var connection = new SQLiteConnection(connectionString);
-            connection.Open();
-            return connection;
-        }
-
         private static DataTable LoadExcelDataTable(string path)
         {
             using (var workBook = new XLWorkbook(path))
@@ -60,16 +53,14 @@ namespace Excel2Sqlite
             }
         }
 
-        public static void CreateDbFromExcel(string path)
+        public static void CreateDbFromExcel(string path, ISqliteHandler sqliteHandler)
         {
             var workBook = new XLWorkbook(path);
             var workSheet = workBook.Worksheet(1);
 
 
-            //var createTableQuery = ""
-
-
             var createTableQuery = GetCreateTableQuery(workSheet);
+            sqliteHandler.ExcecuteQuery(createTableQuery);
         }
 
         private static string GetCreateTableQuery(IXLWorksheet workSheet)
