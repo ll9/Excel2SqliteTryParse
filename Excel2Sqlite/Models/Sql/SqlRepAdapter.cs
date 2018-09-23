@@ -22,10 +22,11 @@ namespace Excel2Sqlite.Models.Sql
 
         public void BuildDatabase()
         {
+
             // CREATE DB
             var createStatement = "Create Table Features";
             var headersWithType = SqlRep.Headers
-                .Select(header => $"{header.Value.Replace(" ", "")}" + " " + header.DataType.GetSqlDataType())
+                .Select(header => $"[{header.Value}]" + " " + header.DataType.GetSqlDataType())
                 .Aggregate((current, next) => $"{current}, {next}");
 
             var createQuery = $"{createStatement} ({headersWithType})";
@@ -34,11 +35,11 @@ namespace Excel2Sqlite.Models.Sql
 
             // INSERT TO DB
             var headers = SqlRep.Headers
-                .Select(header => $"{header.Value.Replace(" ", "")}")
+                .Select(header => $"[{header.Value}]")
                 .ToArray();
 
-            var atHeaders = SqlRep.Headers
-                .Select(header => "@" + $"{header.Value.Replace(" ", "")}")
+            var atHeaders = headers
+                .Select(header => "@" + header.Trim('[', ']').Replace(" ", ""))
                 .ToArray();
 
             var cmdText = $"INSERT INTO Features({String.Join(", ", headers)}) Values ({String.Join(", ", atHeaders)})";
