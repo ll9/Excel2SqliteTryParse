@@ -8,11 +8,14 @@ namespace Excel2Sqlite
 {
     class SqlRep
     {
+        public IList<SqlCellRep> Headers { get; set; }
+        public IList<SqlCellRep> Columns { get; set; }
     }
 
     public class SqlColumnRep
     {
-
+        public IList<SqlCellRep> Cells { get; set; }
+        public DataType DataType { get; set; }
     }
 
     public class SqlCellRep
