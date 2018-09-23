@@ -18,40 +18,30 @@ namespace Excel2Sqlite
     partial class SqlRepConverter
     {
 
-        public static void CreateDbFromExcel(string path, ISqliteHandler sqliteHandler)
+        public static SqlRep ConvertToSqlRep(IXLWorksheet worksheet)
         {
-            var workBook = new XLWorkbook(path);
-            var workSheet = workBook.Worksheet(1);
+            var sqlRep = new SqlRep();
 
-
-            var createTableQuery = GetCreateTableQuery(workSheet);
-            sqliteHandler.ExcecuteQuery(createTableQuery);
-
-            var insertQuery = GetInsertQuery();
-        }
-
-        private static string GetInsertQuery()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static string GetCreateTableQuery(IXLWorksheet workSheet)
-        {
-            var createStatement = "CREATE TABLE FEATURES";
-            foreach (var col in workSheet.ColumnsUsed())
+            foreach (IXLColumn col in worksheet.ColumnsUsed())
             {
-                var guessedType = GuessType(col);
-            }
-            var columnDeclarations = workSheet.ColumnsUsed()
-                .Select(col => 
-                    Regex.Replace(col.FirstCellUsed().Value.ToString(), "[^0-9a-zA-Z]+", "") + 
-                    " " + 
-                    GuessType(col).GetSqlDataType())
-                .Aggregate((current, next) => $"{current}, {next}");
+                var dataType = GuessType(col);
+                var header = new SqlCellRep(col.FirstCellUsed().Value.ToString(), dataType);
 
-            return string.Format("{0} ({1})", createStatement, columnDeclarations);
+                sqlRep.Headers.Add(header);
+                sqlRep.Columns.Add(ConvertToSqlColumnRep(col, dataType));
+            }
+            return sqlRep;
         }
 
+        private static SqlColumnRep ConvertToSqlColumnRep(IXLColumn col, DataType dataType)
+        {
+            var column = new SqlColumnRep(dataType);
+            foreach (var cell in col.CellsUsed().Skip(1))
+            {
+                column.Cells.Add(new SqlCellRep(cell.Value.ToString(), dataType));
+            }
+            return column;
+        }
 
         private static DataType GuessType(IXLColumn col)
         {
