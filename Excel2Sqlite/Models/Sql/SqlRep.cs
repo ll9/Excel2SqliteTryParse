@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Excel2Sqlite
 {
+    /// <summary>
+    /// Sql Representation of Excel Worksheet
+    /// </summary>
     class SqlRep
     {
         public IList<SqlCellRep> Headers { get; set; } = new List<SqlCellRep>();

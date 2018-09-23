@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Excel2Sqlite.Models.Sql
 {
+    /// <summary>
+    /// Creates SQLite Database from SqlRep
+    /// </summary>
     class SqlRepAdapter : IDisposable
     {
         private SqlRep SqlRep { get; }
