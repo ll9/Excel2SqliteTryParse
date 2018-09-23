@@ -29,7 +29,7 @@ namespace Excel2Sqlite
                 if (dbPath != null)
                 {
                     File.Create(dbPath);
-                    ExcelHandler.CreateDbFromExcel(excelPath, sqliteHandler);
+                    SqlRepConverter.CreateDbFromExcel(excelPath, sqliteHandler);
                     MessageBox.Show("Done");
                 }
             }
