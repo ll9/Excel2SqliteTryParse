@@ -31,7 +31,7 @@ namespace Excel2Sqlite
 
         public SqlCellRep(string value, DataType dataType)
         {
-            Value = Regex.Replace(value, "[^a-zA-Z0-9_.]+", "");
+            Value = value;
             DataType = dataType;
         }
 

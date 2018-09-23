@@ -25,7 +25,9 @@ namespace Excel2Sqlite
             foreach (IXLColumn col in worksheet.ColumnsUsed())
             {
                 var dataType = GuessType(col);
-                var header = new SqlCellRep(col.FirstCellUsed().Value.ToString(), dataType);
+                var header = new SqlCellRep(
+                    Regex.Replace(col.FirstCellUsed().Value.ToString(), "[^a-zA-Z0-9_.]+", ""), 
+                    dataType);
 
                 sqlRep.Headers.Add(header);
                 sqlRep.Columns.Add(ConvertToSqlColumnRep(col, dataType));
