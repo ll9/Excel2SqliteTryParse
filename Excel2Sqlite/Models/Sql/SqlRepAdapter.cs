@@ -22,18 +22,12 @@ namespace Excel2Sqlite.Models.Sql
 
         public void BuildDatabase()
         {
+            CreateTable();
+            InsertRows();
+        }
 
-            // CREATE DB
-            var createStatement = "Create Table Features";
-            var headersWithType = SqlRep.Headers
-                .Select(header => header.Value + " " + header.DataType.GetSqlDataType())
-                .Aggregate((current, next) => $"{current}, {next}");
-
-            var createQuery = $"{createStatement} ({headersWithType})";
-
-            ExecuteQuery(createQuery);
-
-            // INSERT TO DB
+        private void InsertRows()
+        {
             var headers = SqlRep.Headers
                 .Select(header => header.Value)
                 .ToArray();
@@ -42,7 +36,7 @@ namespace Excel2Sqlite.Models.Sql
                 .Select(header => "@" + header)
                 .ToArray();
 
-            var cmdText = $"INSERT INTO Features({String.Join(", ", headers)}) Values ({String.Join(", ", headersParameter)})";
+            var cmdText = $"INSERT INTO Features({string.Join(", ", headers)}) Values ({string.Join(", ", headersParameter)})";
 
             Connection.Open();
             var transaction = Connection.BeginTransaction();
@@ -62,6 +56,18 @@ namespace Excel2Sqlite.Models.Sql
             transaction.Commit();
             transaction.Dispose();
             Connection.Close();
+        }
+
+        private void CreateTable()
+        {
+            var createStatement = "Create Table Features";
+            var headersWithType = SqlRep.Headers
+                .Select(header => header.Value + " " + header.DataType.GetSqlDataType())
+                .Aggregate((current, next) => $"{current}, {next}");
+
+            var createQuery = $"{createStatement} ({headersWithType})";
+
+            ExecuteQuery(createQuery);
         }
 
         public void ExecuteQuery(string query)
