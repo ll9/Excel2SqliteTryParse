@@ -26,7 +26,7 @@ namespace Excel2Sqlite.Models.Sql
             // CREATE DB
             var createStatement = "Create Table Features";
             var headersWithType = SqlRep.Headers
-                .Select(header => $"[{header.Value}]" + " " + header.DataType.GetSqlDataType())
+                .Select(header => header.Value + " " + header.DataType.GetSqlDataType())
                 .Aggregate((current, next) => $"{current}, {next}");
 
             var createQuery = $"{createStatement} ({headersWithType})";
@@ -35,14 +35,14 @@ namespace Excel2Sqlite.Models.Sql
 
             // INSERT TO DB
             var headers = SqlRep.Headers
-                .Select(header => $"[{header.Value}]")
+                .Select(header => header.Value)
                 .ToArray();
 
-            var atHeaders = headers
-                .Select(header => "@" + header.Trim('[', ']').Replace(" ", ""))
+            var headersParameter = headers
+                .Select(header => "@" + header)
                 .ToArray();
 
-            var cmdText = $"INSERT INTO Features({String.Join(", ", headers)}) Values ({String.Join(", ", atHeaders)})";
+            var cmdText = $"INSERT INTO Features({String.Join(", ", headers)}) Values ({String.Join(", ", headersParameter)})";
 
             Connection.Open();
             var transaction = Connection.BeginTransaction();
@@ -50,11 +50,11 @@ namespace Excel2Sqlite.Models.Sql
             command.CommandText = cmdText;
 
 
-            for (int i = 0; i < SqlRep.Columns[0].Cells.Count; i++)
+            for (int cellIndex = 0; cellIndex < SqlRep.Columns[0].Cells.Count; cellIndex++)
             {
-                for (int n = 0; n < SqlRep.Headers.Count; n++)
+                for (int columnIndex = 0; columnIndex < SqlRep.Headers.Count; columnIndex++)
                 {
-                    command.Parameters.AddWithValue(atHeaders[n], SqlRep.Columns[n].Cells[i].GetDynamicValue());
+                    command.Parameters.AddWithValue(headersParameter[columnIndex], SqlRep.Columns[columnIndex].Cells[cellIndex].GetDynamicValue());
                 }
                 command.ExecuteNonQuery();
             }

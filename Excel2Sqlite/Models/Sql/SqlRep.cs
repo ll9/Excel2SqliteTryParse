@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Excel2Sqlite
@@ -30,7 +31,7 @@ namespace Excel2Sqlite
 
         public SqlCellRep(string value, DataType dataType)
         {
-            Value = value;
+            Value = Regex.Replace(value, "[^a-zA-Z0-9_.]+", "");
             DataType = dataType;
         }
 
