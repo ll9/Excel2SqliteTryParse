@@ -1,4 +1,6 @@
-﻿namespace Excel2Sqlite
+﻿using System;
+
+namespace Excel2Sqlite
 {
     public enum DataType
     {
@@ -30,6 +32,27 @@
                     return "VARCHAR(60)";
                 default:
                     return "VARCHAR(60)";
+            }
+        }
+
+        public static dynamic GetDynamicValue(this DataType dataType, string value)
+        {
+            switch (dataType)
+            {
+                case (DataType.System_Boolean):
+                    return bool.Parse(value);
+                case (DataType.System_DateTime):
+                    return DateTime.Parse(value);
+                case (DataType.System_Double):
+                    return double.Parse(value);
+                case (DataType.System_Int32):
+                    return int.Parse(value);
+                case (DataType.System_Int64):
+                    return long.Parse(value);
+                case (DataType.System_String):
+                    return value;
+                default:
+                    return value;
             }
         }
     }
