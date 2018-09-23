@@ -1,7 +1,10 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using Excel2Sqlite.Models.Sql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -28,8 +31,12 @@ namespace Excel2Sqlite
                 var dbPath = UserInteractionHandler.GetDialogResult<SaveFileDialog>("Sqlite (*.sqlite) | *.sqlite");
                 if (dbPath != null)
                 {
-                    File.Create(dbPath);
-                    SqlRepConverter.Convert(excelPath, sqliteHandler);
+                    //File.Create(dbPath);
+                    var wb = new XLWorkbook(excelPath);
+
+                    var rep = SqlRepConverter.ConvertToSqlRep(wb.Worksheet(1));
+                    var adapter = new SqlRepAdapter(rep, new SQLiteConnection($"Data Source={dbPath};"));
+                    adapter.BuildDatabase();
                     MessageBox.Show("Done");
                 }
             }
