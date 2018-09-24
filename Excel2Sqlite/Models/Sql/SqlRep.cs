@@ -10,7 +10,7 @@ namespace Excel2Sqlite
     /// <summary>
     /// Sql Representation of Excel Worksheet
     /// </summary>
-    class SqlRep
+    public class SqlRep
     {
         public IList<SqlCellRep> Headers { get; set; } = new List<SqlCellRep>();
         public IList<SqlColumnRep> Columns { get; set; } = new List<SqlColumnRep>();

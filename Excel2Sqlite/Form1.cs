@@ -36,6 +36,11 @@ namespace Excel2Sqlite
                     var wb = new XLWorkbook(excelPath);
 
                     var rep = SqlRepConverter.ConvertToSqlRep(wb.Worksheet(1));
+
+                    //TODO: Drop Unselected Columns From Dialog
+                    new SelectTablesDialog(rep).Show(this);
+
+
                     var adapter = new SqlRepAdapter(rep, new SQLiteConnection($"Data Source={dbPath};"), Tablename);
                     adapter.BuildDatabase();
                     MessageBox.Show("Done");
