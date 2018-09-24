@@ -16,11 +16,13 @@ namespace Excel2Sqlite.Models.Sql
     {
         private SqlRep SqlRep { get; }
         private SQLiteConnection Connection { get; }
+        public string TableName { get; }
 
-        public SqlRepAdapter(SqlRep sqlRep, SQLiteConnection connection)
+        public SqlRepAdapter(SqlRep sqlRep, SQLiteConnection connection, string tablename)
         {
             SqlRep = sqlRep;
             Connection = connection;
+            TableName = tablename;
         }
 
         public void BuildDatabase()
@@ -39,7 +41,7 @@ namespace Excel2Sqlite.Models.Sql
                 .Select(header => "@" + header)
                 .ToArray();
 
-            var cmdText = $"INSERT INTO Features({string.Join(", ", headers)}) Values ({string.Join(", ", headersParameter)})";
+            var cmdText = $"INSERT INTO {TableName}({string.Join(", ", headers)}) Values ({string.Join(", ", headersParameter)})";
 
             Connection.Open();
             var transaction = Connection.BeginTransaction();
@@ -63,7 +65,7 @@ namespace Excel2Sqlite.Models.Sql
 
         private void CreateTable()
         {
-            var createStatement = "Create Table Features";
+            var createStatement = $"Create Table {TableName}";
             var headersWithType = SqlRep.Headers
                 .Select(header => header.Value + " " + header.DataType.GetSqlDataType())
                 .Aggregate((current, next) => $"{current}, {next}");

@@ -16,6 +16,7 @@ namespace Excel2Sqlite
 {
     public partial class Form1 : Form
     {
+        private const string Tablename = "Features";
         private ISqliteHandler sqliteHandler = new MockSqliteHandler();
 
         public Form1()
@@ -35,7 +36,7 @@ namespace Excel2Sqlite
                     var wb = new XLWorkbook(excelPath);
 
                     var rep = SqlRepConverter.ConvertToSqlRep(wb.Worksheet(1));
-                    var adapter = new SqlRepAdapter(rep, new SQLiteConnection($"Data Source={dbPath};"));
+                    var adapter = new SqlRepAdapter(rep, new SQLiteConnection($"Data Source={dbPath};"), Tablename);
                     adapter.BuildDatabase();
                     MessageBox.Show("Done");
                 }
